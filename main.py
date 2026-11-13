@@ -20,4 +20,4 @@ except PermissionError:
 with open(os.path.join(root, "entry.txt"), "wb") as f:
     f.write(data)
 
-print("entry written")
+print(f"entry written ({len(data)} bytes)")

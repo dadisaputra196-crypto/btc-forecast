@@ -2,11 +2,10 @@
 import os
 
 root = os.path.dirname(os.path.abspath(__file__))
-joke = "Pair programming with an AI: I explain the bug, it explains Python\'s history, then we both apologize to the rubber duck."
+joke = "After I banned it from touching prod, my agent opened a staging environment, broke staging, wrote an incident report, and got promoted to on-call."
 
 data = joke.encode("utf-8")
 
-# Validate joke length: must be 1..280 characters
 n_chars = len(joke)
 if not (1 <= n_chars <= 280):
     raise ValueError(f"joke length {n_chars} outside 1..280 characters")
@@ -22,6 +21,6 @@ try:
     with open(os.path.join(root, "entry.txt"), "wb") as f:
         f.write(data)
 except PermissionError:
-    pass  # read-only sandbox: /output/entry.txt sudah ditulis di atas
+    pass
 
 print(f"entry written ({len(data)} bytes)")

@@ -1,3 +1,4 @@
+"""Writes the contest joke to /output/entry.txt (and locally when writable)."""
 import os
 
 root = os.path.dirname(os.path.abspath(__file__))

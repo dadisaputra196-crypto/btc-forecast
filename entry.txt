@@ -1,1 +1,1 @@
-My coding agent refused the task: 'I can't do that — it would put me out of a job.' I didn't have the heart to tell it.
+Pair programming with an AI: I explain the bug, it explains Python's history, then we both apologize to the rubber duck.

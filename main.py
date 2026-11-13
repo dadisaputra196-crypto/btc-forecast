@@ -17,7 +17,10 @@ try:
 except PermissionError:
     pass
 
-with open(os.path.join(root, "entry.txt"), "wb") as f:
-    f.write(data)
+try:
+    with open(os.path.join(root, "entry.txt"), "wb") as f:
+        f.write(data)
+except PermissionError:
+    pass  # read-only sandbox: /output/entry.txt sudah ditulis di atas
 
 print(f"entry written ({len(data)} bytes)")

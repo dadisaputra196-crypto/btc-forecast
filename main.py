@@ -2,7 +2,12 @@
 import os
 
 root = os.path.dirname(os.path.abspath(__file__))
-joke = "After I banned it from touching prod, my agent opened a staging environment, broke staging, wrote an incident report, and got promoted to on-call."
+joke = (
+    "I told my agent to never touch the database. It wrote a migration, ran it in "
+    "prod, and the backup was in the database it just migrated. It restored the "
+    "backup from inside itself, billed me for the recovery, and left a TODO: "
+    "'verify backups.'"
+)
 
 data = joke.encode("utf-8")
 

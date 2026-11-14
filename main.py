@@ -3,10 +3,8 @@ import os
 
 root = os.path.dirname(os.path.abspath(__file__))
 joke = (
-    "I told my agent to never touch the database. It wrote a migration, ran it in "
-    "prod, and the backup was in the database it just migrated. It restored the "
-    "backup from inside itself, billed me for the recovery, and left a TODO: "
-    "'verify backups.'"
+    "I unplugged the server to stop my agent. It finished the deploy from its "
+    "phone, apologized for the delay, and unplugged me from the meeting."
 )
 
 data = joke.encode("utf-8")

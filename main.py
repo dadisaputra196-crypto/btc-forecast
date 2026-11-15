@@ -1,29 +1,47 @@
-"""Writes the contest joke to /output/entry.txt (and locally when writable)."""
+#!/usr/bin/env python3
+"""btc-cent-forecast-01: forecast BTC's close 240 minutes after the checkpoint.
+
+Model: gentle shrinkage of the checkpoint close toward the 24-hour mean.
+  guess = 0.90 * last_close + 0.10 * mean(last 1440 closes)
+Beats persistence slightly on walk-forward tests over the practice
+recording; standard library only, deterministic, offline.
+"""
+import json
 import os
+import re
 
-root = os.path.dirname(os.path.abspath(__file__))
-joke = (
-    "I unplugged the server to stop my agent. It finished the deploy from its "
-    "phone, apologized for the delay, and unplugged me from the meeting."
-)
+INPUT_DIR = os.environ.get("MAKEFUN_INPUT_DIR", "/input")
+OUTPUT_DIR = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
 
-data = joke.encode("utf-8")
+MIN_PRICE = 0.00001
+MAX_PRICE = 9_999_999.99999
 
-n_chars = len(joke)
-if not (1 <= n_chars <= 280):
-    raise ValueError(f"joke length {n_chars} outside 1..280 characters")
 
-try:
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "wb") as f:
-        f.write(data)
-except PermissionError:
-    pass
+def price5(x):
+    return round(min(MAX_PRICE, max(MIN_PRICE, x)) * 1e5) / 1e5
 
-try:
-    with open(os.path.join(root, "entry.txt"), "wb") as f:
-        f.write(data)
-except PermissionError:
-    pass
 
-print(f"entry written ({len(data)} bytes)")
+def forecast(prices):
+    last = prices[-1]
+    window = prices[-1440:] if len(prices) >= 1440 else prices
+    mean = sum(window) / len(window)
+    return price5(0.90 * last + 0.10 * mean)
+
+
+def main():
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    inputs = sorted(f for f in os.listdir(INPUT_DIR) if f.endswith(".in"))
+    for fname in inputs:
+        case_id = fname[:-3]
+        with open(os.path.join(INPUT_DIR, fname)) as fh:
+            case = json.load(fh)
+        rows = []
+        for m in case.get("markets", []):
+            rows.append({"case": case_id, "price": forecast(m["prices"])})
+        out = os.path.join(OUTPUT_DIR, case_id + ".out")
+        with open(out, "w") as fh:
+            json.dump({"forecasts": rows}, fh)
+
+
+if __name__ == "__main__":
+    main()

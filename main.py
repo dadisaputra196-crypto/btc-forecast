@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """btc-cent-forecast-01: forecast BTC's close 240 minutes after the checkpoint.
 
-Model: gentle shrinkage of the checkpoint close toward the 24-hour mean.
+Model: gentle, deterministic shrinkage of the checkpoint close toward the 24-hour mean.
   guess = 0.90 * last_close + 0.10 * mean(last 1440 closes)
 Beats persistence slightly on walk-forward tests over the practice
 recording; standard library only, deterministic, offline.
